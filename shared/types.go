@@ -2,6 +2,7 @@ package shared
 
 // See UserResponse object defined in https://github.com/silinternational/idp-id-broker/blob/develop/api.raml
 type User struct {
+	IDP          string   `json:"idp"`
 	EmployeeID   string   `json:"employee_id"`
 	FirstName    string   `json:"first_name"`
 	LastName     string   `json:"last_name"`
@@ -22,9 +23,9 @@ type User struct {
 			Label       string `json:"label"`
 			CreatedUtc  string `json:"created_utc"`
 			LastUsedUtc string `json:"last_used_utc"`
-			Data        struct {
-				Count int `json:"count"`
-			} `json:"data"`
+			// Data        struct {
+			// 	Count int `json:"count"`
+			// } `json:"data"`
 		} `json:"options"`
 	} `json:"mfa"`
 	Password struct {

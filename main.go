@@ -15,6 +15,7 @@ import (
 type BrokerConfig struct {
 	BaseURL string
 	Token   string
+	IDP     string
 }
 
 func main() {
@@ -41,9 +42,15 @@ func loadConfig() (BrokerConfig, error) {
 		return BrokerConfig{}, fmt.Errorf("required env var BROKER_TOKEN is missing")
 	}
 
+	idpName := os.Getenv("IDP_NAME")
+	if idpName == "" {
+		return BrokerConfig{}, fmt.Errorf("required env var IDP_NAME is missing")
+	}
+
 	return BrokerConfig{
 		BaseURL: baseUrl,
 		Token:   token,
+		IDP:     idpName,
 	}, nil
 }
 
@@ -56,7 +63,7 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 		return []shared.User{}, err
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer: %s", config.Token))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", config.Token))
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -77,6 +84,10 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 		log.Println("API response body:", string(bodyText))
 		log.Println("Calling API:", url)
 		return []shared.User{}, err
+	}
+
+	for i := range results {
+		results[i].IDP = config.IDP
 	}
 
 	return results, nil
