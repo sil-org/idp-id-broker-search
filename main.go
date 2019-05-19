@@ -22,13 +22,13 @@ func main() {
 	lambda.Start(handler)
 }
 
-func handler(query string) ([]shared.User, error) {
+func handler(query shared.Query) ([]shared.User, error) {
 	config, err := loadConfig()
 	if err != nil {
 		return []shared.User{}, err
 	}
 
-	return search(config, query)
+	return search(config, query.Search)
 }
 
 func loadConfig() (BrokerConfig, error) {

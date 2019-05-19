@@ -1,5 +1,10 @@
 package shared
 
+// Query is expected payload to lambda function
+type Query struct {
+	Search string
+}
+
 // See UserResponse object defined in https://github.com/silinternational/idp-id-broker/blob/develop/api.raml
 type User struct {
 	IDP          string   `json:"idp"`
