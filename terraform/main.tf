@@ -1,6 +1,6 @@
 // Create S3 bucket for uploading binary
 resource "aws_s3_bucket" "idp-id-broker-search" {
-  bucket        = "${var.app_name}"
+  bucket        = "${var.app_name}-${var.aws_region}"
   acl           = "public-read"
   force_destroy = true
 
