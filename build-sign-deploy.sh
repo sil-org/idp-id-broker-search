@@ -12,4 +12,4 @@ zip idp-id-broker-search.zip idp-id-broker-search
 
 # Push zip to S3 under folder for CI_BRANCH (ex: develop or 1.2.3)
 CI_BRANCH=${CI_BRANCH:="unknown"}
-aws s3 cp idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
+aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
