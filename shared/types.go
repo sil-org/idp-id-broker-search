@@ -7,19 +7,21 @@ type Query struct {
 
 // See UserResponse object defined in https://github.com/silinternational/idp-id-broker/blob/develop/api.raml
 type User struct {
-	IDP          string   `json:"idp"`
-	EmployeeID   string   `json:"employee_id"`
-	FirstName    string   `json:"first_name"`
-	LastName     string   `json:"last_name"`
-	DisplayName  string   `json:"display_name"`
-	Username     string   `json:"username"`
-	Email        string   `json:"email"`
-	Active       string   `json:"active"`
-	Locked       string   `json:"locked"`
-	LastLoginUtc string   `json:"last_login_utc"`
-	Hide         string   `json:"hide"`
-	Groups       []string `json:"groups"`
-	Mfa          struct {
+	IDP           string   `json:"idp"`
+	EmployeeID    string   `json:"employee_id"`
+	FirstName     string   `json:"first_name"`
+	LastName      string   `json:"last_name"`
+	DisplayName   string   `json:"display_name"`
+	Username      string   `json:"username"`
+	Email         string   `json:"email"`
+	Active        string   `json:"active"`
+	Locked        string   `json:"locked"`
+	LastLoginUtc  string   `json:"last_login_utc"`
+	ManagerEmail  string   `json:"manager_email"`
+	PersonalEmail string   `json:"personal_email"`
+	Hide          string   `json:"hide"`
+	Groups        []string `json:"groups"`
+	Mfa           struct {
 		Prompt  string `json:"prompt"`
 		Add     string `json:"add"`
 		Options []struct {
