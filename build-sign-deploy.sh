@@ -16,4 +16,4 @@ sha256sum idp-id-broker-search.zip | base64 > idp-id-broker-search.zip.sum
 # Push zip and checksum to S3 under folder for CI_BRANCH (ex: develop or 1.2.3)
 CI_BRANCH=${CI_BRANCH:="unknown"}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
-aws s3 cp --acl public-read idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
+aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
