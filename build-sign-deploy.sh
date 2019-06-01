@@ -9,7 +9,7 @@ GOOS=linux go build -ldflags="-s -w" -o idp-id-broker-search main.go
 zip idp-id-broker-search.zip idp-id-broker-search
 
 # Create base64 encoded sha256 checksum for terraform to use to detect changes
-openssl dgst -binary -sha256 idp-id-broker-search.zip | base64 > idp-id-broker-search.zip.sum
+openssl dgst -binary -sha256 idp-id-broker-search.zip | base64 --wrap=0 > idp-id-broker-search.zip.sum
 
 #runny gpg --yes -a -o "idp-id-broker-search.zip.sig" --detach-sig idp-id-broker-search.zip
 
