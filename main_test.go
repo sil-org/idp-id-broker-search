@@ -11,6 +11,8 @@ import (
 )
 
 func Test_loadConfig(t *testing.T) {
+	idp := "OurIDP"
+
 	tests := []struct {
 		name    string
 		env     map[string]string
@@ -44,10 +46,12 @@ func Test_loadConfig(t *testing.T) {
 			env: map[string]string{
 				"BROKER_BASE_URL": "https://example.com",
 				"BROKER_TOKEN":    "abc123",
+				"IDP_NAME": idp,
 			},
 			want: BrokerConfig{
 				BaseURL: "https://example.com",
 				Token:   "abc123",
+				IDP: idp,
 			},
 			wantErr: false,
 		},
@@ -72,6 +76,8 @@ func Test_loadConfig(t *testing.T) {
 }
 
 func Test_search(t *testing.T) {
+	idp := "OurIDP"
+
 	type args struct {
 		status       int
 		query        string
@@ -105,6 +111,7 @@ func Test_search(t *testing.T) {
 			want: []shared.User{
 				{
 					EmployeeID: "123456",
+					IDP: idp,
 				},
 			},
 			wantErr: false,
@@ -119,9 +126,11 @@ func Test_search(t *testing.T) {
 			want: []shared.User{
 				{
 					EmployeeID: "123456",
+					IDP: idp,
 				},
 				{
 					EmployeeID: "098765",
+					IDP: idp,
 				},
 			},
 			wantErr: false,
@@ -140,6 +149,7 @@ func Test_search(t *testing.T) {
 			config := BrokerConfig{
 				BaseURL: server.URL,
 				Token:   "ignored",
+				IDP: idp,
 			}
 
 			got, err := search(config, tt.args.query)

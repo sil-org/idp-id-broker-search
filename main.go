@@ -56,8 +56,8 @@ func loadConfig() (BrokerConfig, error) {
 
 func search(config BrokerConfig, query string) ([]shared.User, error) {
 	client := &http.Client{}
-	url := fmt.Sprintf("%s/user?search=%s&mask=yes", config.BaseURL, url.QueryEscape(query))
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	searchURL := fmt.Sprintf("%s/user?search=%s&mask=yes", config.BaseURL, url.QueryEscape(query))
+	req, err := http.NewRequest(http.MethodGet, searchURL, nil)
 	if err != nil {
 		log.Println(err)
 		return []shared.User{}, err
@@ -82,7 +82,7 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 	if err != nil {
 		log.Println("JSON parse error:", err)
 		log.Println("API response body:", string(bodyText))
-		log.Println("Calling API:", url)
+		log.Println("Calling API:", searchURL)
 		return []shared.User{}, err
 	}
 
