@@ -20,6 +20,7 @@ type User struct {
 	ManagerEmail  string   `json:"manager_email"`
 	PersonalEmail string   `json:"personal_email"`
 	Hide          string   `json:"hide"`
+	RequireMFA    string   `json:"require_mfa"`
 	Groups        []string `json:"groups"`
 	Mfa           struct {
 		Prompt  string `json:"prompt"`
