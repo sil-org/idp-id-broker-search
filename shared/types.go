@@ -21,7 +21,7 @@ type User struct {
 	PersonalEmail string   `json:"personal_email"`
 	Hide          string   `json:"hide"`
 	RequireMFA    string   `json:"require_mfa"`
-	Groups        []string `json:"groups"`
+	Member        []string `json:"member"`
 	Mfa           struct {
 		Prompt  string `json:"prompt"`
 		Add     string `json:"add"`
