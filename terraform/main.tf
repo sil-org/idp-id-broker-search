@@ -8,9 +8,9 @@ resource "aws_s3_bucket" "idp-id-broker-search" {
     enabled = true
   }
 
-  tags {
-    app_name = "${var.app_name}"
-    app_env  = "${var.app_env}"
+  tags = {
+    app_name = var.app_name
+    app_env  = var.app_env
   }
 }
 
@@ -19,20 +19,26 @@ resource "aws_iam_user" "ci-uploader" {
 }
 
 resource "aws_iam_access_key" "ci-uploader" {
-  user = "${aws_iam_user.ci-uploader.name}"
+  user = aws_iam_user.ci-uploader.name
 }
 
 data "template_file" "ci-uploader" {
-  template = "${file("${path.module}/ci-bucket-policy.json")}"
+  template = file("${path.module}/ci-bucket-policy.json")
 
-  vars {
-    bucket_name = "${aws_s3_bucket.idp-id-broker-search.bucket}"
+  vars = {
+    bucket_name = aws_s3_bucket.idp-id-broker-search.bucket
   }
 }
 
 resource "aws_iam_user_policy" "ci-uploader" {
   name = "S3-Access"
-  user = "${aws_iam_user.ci-uploader.name}"
+  user = aws_iam_user.ci-uploader.name
 
-  policy = "${data.template_file.ci-uploader.rendered}"
+  policy = data.template_file.ci-uploader.rendered
+}
+
+resource "null_resource" "force_apply" {
+  triggers = {
+    time = timestamp()
+  }
 }

@@ -15,3 +15,10 @@ aws.env
 # dev tools metadata
 .idea/
 node_modules/
+
+# terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+tfc-remote.tf
+*.tfvars
