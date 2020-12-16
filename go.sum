@@ -1,0 +1,4 @@
+github.com/aws/aws-lambda-go v1.10.0 h1:uafgdfYGQD0UeT7d2uKdyWW8j/ZYRifRPIdmeqLzLCk=
+github.com/aws/aws-lambda-go v1.10.0/go.mod h1:zUsUQhAUjYzR8AuduJPCfhBuKWUaDbQiPOG+ouzmE1A=
+github.com/silinternational/idp-id-broker-search v0.0.0-20201214151306-2e6c85ae8c45 h1:Xqc5jzSVzi4jg51iR81r5Kj0Ar49PHEUXeaLxa1Cwmc=
+github.com/silinternational/idp-id-broker-search v0.0.0-20201214151306-2e6c85ae8c45/go.mod h1:iWQkhQSpIc5/orcJIVgJIlJRGdlY/KBndZsizmNRkn8=

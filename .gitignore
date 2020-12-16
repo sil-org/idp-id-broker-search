@@ -22,3 +22,7 @@ node_modules/
 .terraform/
 tfc-remote.tf
 *.tfvars
+
+# built app and zip package
+idp-id-broker-search
+idp-id-broker-search.zip
