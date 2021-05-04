@@ -18,5 +18,6 @@ CI_BRANCH=${CI_BRANCH:="unknown"}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
 aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
 
+AWS_REGION=${AWS_REGION2}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET2/$CI_BRANCH/
 aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET2/$CI_BRANCH/
