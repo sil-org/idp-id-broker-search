@@ -17,3 +17,6 @@ openssl dgst -binary -sha256 idp-id-broker-search.zip | base64 --wrap=0 > idp-id
 CI_BRANCH=${CI_BRANCH:="unknown"}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
 aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET/$CI_BRANCH/
+
+aws s3 cp --acl public-read idp-id-broker-search.zip s3://$DOWNLOAD_BUCKET2/$CI_BRANCH/
+aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET2/$CI_BRANCH/
