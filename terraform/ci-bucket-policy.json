@@ -8,7 +8,10 @@
         "s3:PutObject",
         "s3:PutObjectAcl"
       ],
-      "Resource": "arn:aws:s3:::${bucket_name}/*"
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}/*",
+        "arn:aws:s3:::${bucket2_name}/*"
+      ]
     }
   ]
 }

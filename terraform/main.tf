@@ -14,6 +14,22 @@ resource "aws_s3_bucket" "idp-id-broker-search" {
   }
 }
 
+// Create a second S3 bucket for uploading binary to a different region (crude form of replication)
+resource "aws_s3_bucket" "idp-id-broker-search-2" {
+  bucket        = "${var.app_name}-us-west-2"
+  acl           = "public-read"
+  force_destroy = true
+
+  versioning {
+    enabled = true
+  }
+
+  tags = {
+    app_name = var.app_name
+    app_env  = var.app_env
+  }
+}
+
 resource "aws_iam_user" "ci-uploader" {
   name = "${var.app_name}-uploader"
 }
@@ -27,6 +43,7 @@ data "template_file" "ci-uploader" {
 
   vars = {
     bucket_name = aws_s3_bucket.idp-id-broker-search.bucket
+    bucket2_name = aws_s3_bucket.idp-id-broker-search-2.bucket
   }
 }
 
