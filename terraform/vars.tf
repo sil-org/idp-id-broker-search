@@ -15,3 +15,7 @@ variable "aws_access_key" {
 
 variable "aws_secret_key" {
 }
+
+locals {
+  aws-region-2 = "us-west-2"
+}
