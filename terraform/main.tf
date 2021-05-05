@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "idp-id-broker-search" {
 
 // Create a second S3 bucket for uploading binary to a different region (crude form of replication)
 resource "aws_s3_bucket" "idp-id-broker-search-2" {
-  provider      = "aws.region-2"
+  provider      = aws.region-2
   bucket        = "${var.app_name}-${local.aws-region-2}"
   acl           = "public-read"
   force_destroy = true
