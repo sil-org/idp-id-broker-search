@@ -54,9 +54,3 @@ resource "aws_iam_user_policy" "ci-uploader" {
 
   policy = data.template_file.ci-uploader.rendered
 }
-
-resource "null_resource" "force_apply" {
-  triggers = {
-    time = timestamp()
-  }
-}

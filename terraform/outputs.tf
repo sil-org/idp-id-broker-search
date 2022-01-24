@@ -3,7 +3,8 @@ output "ci-uploader-access-key" {
 }
 
 output "ci-uploader-secret-key" {
-  value = aws_iam_access_key.ci-uploader.secret
+  value     = aws_iam_access_key.ci-uploader.secret
+  sensitive = true
 }
 
 output "bucket-name" {
