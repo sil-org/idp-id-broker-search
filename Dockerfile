@@ -1,5 +1,4 @@
-FROM golang:latest
-
+FROM golang:1.18
 RUN apt-get update -y && apt-get install -y awscli zip
 
 # Copy in source and install deps
