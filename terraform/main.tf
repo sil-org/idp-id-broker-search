@@ -1,3 +1,8 @@
+
+locals {
+  aws-region-2 = "us-west-2"
+}
+
 // Create S3 bucket for uploading binary
 resource "aws_s3_bucket" "idp-id-broker-search" {
   bucket        = "${var.app_name}-${var.aws_region}"
