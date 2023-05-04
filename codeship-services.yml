@@ -5,12 +5,8 @@ app:
   cached: true
   working_dir: /app/idp-id-broker-search
 
-tracker:
-  image: silintl/app-deployment-tracker-ga:latest
-  encrypted_env_file: aws.env.encrypted
-
 ga4tracker:
-  image: silintl/ga-event-tracker:1.0.1
+  image: silintl/ga-event-tracker:1.0.2
   encrypted_env_file: aws.env.encrypted
   environment:
     GA_MEASUREMENT_ID: G-NY4R8HM3Y3
