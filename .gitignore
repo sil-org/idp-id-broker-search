@@ -15,3 +15,14 @@ aws.env
 # dev tools metadata
 .idea/
 node_modules/
+
+# terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+tfc-remote.tf
+*.tfvars
+
+# built app and zip package
+idp-id-broker-search
+idp-id-broker-search.zip
