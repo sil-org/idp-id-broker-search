@@ -5,8 +5,8 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias      = "region-2"
-  region     = local.aws-region-2
+  alias      = "secondary"
+  region     = var.aws_region_secondary
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 
