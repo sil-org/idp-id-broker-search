@@ -10,6 +10,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "aws_region_secondary" {
+  default = "us-west-2"
+}
+
 variable "aws_access_key" {
 }
 
