@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "idp-id-broker-search" {
 
 resource "aws_s3_bucket_acl" "idp-id-broker-search" {
   bucket = aws_s3_bucket.idp-id-broker-search.id
-  acl = "public-read"
+  acl    = "public-read"
 }
 
 resource "aws_s3_bucket_versioning" "idp-id-broker-search" {
@@ -35,12 +35,14 @@ resource "aws_s3_bucket" "idp-id-broker-search-2" {
 }
 
 resource "aws_s3_bucket_acl" "idp-id-broker-search-2" {
-  bucket = aws_s3_bucket.idp-id-broker-search-2.id
-  acl = "public-read"
+  provider = aws.secondary
+  bucket   = aws_s3_bucket.idp-id-broker-search-2.id
+  acl      = "public-read"
 }
 
 resource "aws_s3_bucket_versioning" "idp-id-broker-search-2" {
-  bucket = aws_s3_bucket.idp-id-broker-search-2.id
+  provider = aws.secondary
+  bucket   = aws_s3_bucket.idp-id-broker-search-2.id
   versioning_configuration {
     status = "Enabled"
   }
