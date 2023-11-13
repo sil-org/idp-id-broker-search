@@ -26,7 +26,7 @@ fi
 export AWS_REGION=${AWS_REGION2}
 bucket=$DOWNLOAD_BUCKET-${AWS_REGION}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$bucket/$CI_BRANCH/
-aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$DOWNLOAD_BUCKET2/$CI_BRANCH/
+aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$bucket/$CI_BRANCH/
 
 if [ -z $AWS_REGION3 ]; then
   exit 0
