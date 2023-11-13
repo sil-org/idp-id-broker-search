@@ -50,7 +50,7 @@ resource "aws_s3_bucket_versioning" "idp-id-broker-search-2" {
 
 
 // Create a third S3 bucket for migration of primary region to us-east-2
-resource "aws_s3_bucket" "idp-id-broker-search-3" {
+resource "aws_s3_bucket" "idp_id_broker_search_3" {
   provider      = aws.new_primary
   bucket        = "${var.app_name}-${var.aws_region_new_primary}"
   force_destroy = true
@@ -61,18 +61,41 @@ resource "aws_s3_bucket" "idp-id-broker-search-3" {
   }
 }
 
-resource "aws_s3_bucket_acl" "idp-id-broker-search-3" {
+resource "aws_s3_bucket_acl" "idp_id_broker_search_3" {
   provider = aws.new_primary
-  bucket   = aws_s3_bucket.idp-id-broker-search-3.id
-  acl      = "public-read"
+
+  bucket = aws_s3_bucket.idp_id_broker_search_3.id
+  acl    = "public-read"
 }
 
-resource "aws_s3_bucket_versioning" "idp-id-broker-search-3" {
+resource "aws_s3_bucket_versioning" "idp_id_broker_search_3" {
   provider = aws.new_primary
-  bucket   = aws_s3_bucket.idp-id-broker-search-3.id
+
+  bucket = aws_s3_bucket.idp_id_broker_search_3.id
   versioning_configuration {
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search_3" {
+  provider = aws.new_primary
+
+  bucket = aws_s3_bucket.idp_id_broker_search_3.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+  depends_on = [aws_s3_bucket_public_access_block.idp_id_broker_search_3]
+}
+
+
+resource "aws_s3_bucket_public_access_block" "idp_id_broker_search_3" {
+  provider = aws.new_primary
+
+  bucket                  = aws_s3_bucket.idp_id_broker_search_3.id
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_iam_user" "ci-uploader" {
@@ -89,6 +112,7 @@ data "template_file" "ci-uploader" {
   vars = {
     bucket_name  = aws_s3_bucket.idp-id-broker-search.bucket
     bucket2_name = aws_s3_bucket.idp-id-broker-search-2.bucket
+    bucket3_name = aws_s3_bucket.idp_id_broker_search_3.bucket
   }
 }
 
