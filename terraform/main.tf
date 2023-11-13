@@ -48,6 +48,33 @@ resource "aws_s3_bucket_versioning" "idp-id-broker-search-2" {
   }
 }
 
+
+// Create a third S3 bucket for migration of primary region to us-east-2
+resource "aws_s3_bucket" "idp-id-broker-search-3" {
+  provider      = aws.new_primary
+  bucket        = "${var.app_name}-${var.aws_region_new_primary}"
+  force_destroy = true
+
+  tags = {
+    app_name = var.app_name
+    app_env  = var.app_env
+  }
+}
+
+resource "aws_s3_bucket_acl" "idp-id-broker-search-3" {
+  provider = aws.new_primary
+  bucket   = aws_s3_bucket.idp-id-broker-search-3.id
+  acl      = "public-read"
+}
+
+resource "aws_s3_bucket_versioning" "idp-id-broker-search-3" {
+  provider = aws.new_primary
+  bucket   = aws_s3_bucket.idp-id-broker-search-3.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_iam_user" "ci-uploader" {
   name = "${var.app_name}-uploader"
 }
