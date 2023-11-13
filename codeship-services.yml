@@ -2,5 +2,6 @@ app:
   build:
     dockerfile_path: Dockerfile
   encrypted_env_file: aws.env.encrypted
+  env_file: aws-region.env
   cached: true
   working_dir: /app/idp-id-broker-search
