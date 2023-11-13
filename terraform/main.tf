@@ -64,8 +64,9 @@ resource "aws_s3_bucket" "idp_id_broker_search_3" {
 resource "aws_s3_bucket_acl" "idp_id_broker_search_3" {
   provider = aws.new_primary
 
-  bucket = aws_s3_bucket.idp_id_broker_search_3.id
-  acl    = "public-read"
+  bucket     = aws_s3_bucket.idp_id_broker_search_3.id
+  acl        = "public-read"
+  depends_on = [aws_s3_bucket_ownership_controls.idp_id_broker_search_3]
 }
 
 resource "aws_s3_bucket_versioning" "idp_id_broker_search_3" {
