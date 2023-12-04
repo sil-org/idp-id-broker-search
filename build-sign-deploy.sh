@@ -5,10 +5,9 @@ set -x -e
 #runny aws s3 cp s3://$KEY_BUCKET/secret.key ./
 #runny gpg --import secret.key
 
-# Produce a named binary for backward compatibility and a "bootstrap" binary for the provided.al2 runtime
-GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o idp-id-broker-search main.go
-cp idp-id-broker-search bootstrap
-zip idp-id-broker-search.zip idp-id-broker-search bootstrap
+# Create the binary with a filename "bootstrap" as required by the provided.al2 runtime
+GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o bootstrap main.go
+zip idp-id-broker-search.zip bootstrap
 
 # Create base64 encoded sha256 checksum for terraform to use to detect changes
 openssl dgst -binary -sha256 idp-id-broker-search.zip | base64 --wrap=0 > idp-id-broker-search.zip.sum
