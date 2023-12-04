@@ -24,6 +24,7 @@ tfc-remote.tf
 *.tfvars
 
 # built app and zip package
+bootstrap
 idp-id-broker-search
 idp-id-broker-search.zip
 idp-id-broker-search.zip.sum
