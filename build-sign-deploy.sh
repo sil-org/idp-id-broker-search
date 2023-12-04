@@ -6,7 +6,7 @@ set -x -e
 #runny gpg --import secret.key
 
 # Produce a named binary for backward compatibility and a "bootstrap" binary for the provided.al2 runtime
-GOOS=linux go build -ldflags="-s -w" -o idp-id-broker-search main.go
+GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o idp-id-broker-search main.go
 cp idp-id-broker-search bootstrap
 zip idp-id-broker-search.zip idp-id-broker-search bootstrap
 
