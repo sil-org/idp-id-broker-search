@@ -1,0 +1,31 @@
+name: Test, Deploy, Publish
+
+on:
+  push:
+
+env:
+  DOWNLOAD_BUCKET: idp-id-broker-search
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test
+        run: docker-compose run --rm app go test ./...
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: !startsWith(github.ref_name, 'feature')
+    env:
+      DOWNLOAD_BUCKET: ${{ vars.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test
+        run: docker-compose run --rm app ./build-sign-deploy.sh

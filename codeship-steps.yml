@@ -1,8 +1,0 @@
-- name: test
-  service: app
-  command: go test ./...
-
-- name: deploy
-  service: app
-  exclude: ^(feature)
-  command: ./build-sign-deploy.sh

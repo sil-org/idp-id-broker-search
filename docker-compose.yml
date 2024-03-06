@@ -3,6 +3,5 @@ services:
   app:
     build: .
     env_file:
-      - aws.env
       - aws-region.env
     command: ["bash"]
