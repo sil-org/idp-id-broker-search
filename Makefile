@@ -1,6 +1,6 @@
 zip: build
 	mv main bootstrap
-	zip idp-id-broker-search.zip idp-id-broker-search
+	zip idp-id-broker-search.zip bootstrap
 	rm -f bootstrap
 
 build:
