@@ -18,8 +18,9 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: test
     runs-on: ubuntu-latest
-    if: !startsWith(github.ref_name, 'feature')
+    if: "!startsWith(github.ref_name, 'feature')"
     env:
       DOWNLOAD_BUCKET: ${{ vars.AWS_REGION }}
       AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
