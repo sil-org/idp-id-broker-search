@@ -3,9 +3,6 @@ name: Test, Deploy, Publish
 on:
   push:
 
-env:
-  DOWNLOAD_BUCKET: idp-id-broker-search
-
 jobs:
   test:
     name: Test
@@ -22,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     if: "!startsWith(github.ref_name, 'feature')"
     env:
-      DOWNLOAD_BUCKET: ${{ vars.AWS_REGION }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
