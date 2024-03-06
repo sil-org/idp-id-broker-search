@@ -3,6 +3,9 @@ services:
   app:
     build: .
     env_file:
-      - aws.env
       - aws-region.env
+    environment:
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      DOWNLOAD_BUCKET: idp-id-broker-search
     command: ["bash"]
