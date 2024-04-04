@@ -3,13 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/silinternational/idp-id-broker-search/shared"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/aws/aws-lambda-go/lambda"
+
+	"github.com/silinternational/idp-id-broker-search/shared"
 )
 
 type BrokerConfig struct {
@@ -77,7 +79,7 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 
 	var results []shared.User
 
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	bodyText, err := io.ReadAll(resp.Body)
 	err = json.Unmarshal(bodyText, &results)
 	if err != nil {
 		log.Println("JSON parse error:", err)
