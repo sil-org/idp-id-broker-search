@@ -259,26 +259,10 @@ func fakeUser(userID int) shared.User {
 			Hide:           "no",
 			RequireMFA:     "no",
 			Member:         []string{"dev"},
-			Mfa: struct {
-				Prompt  string `json:"prompt"`
-				Add     string `json:"add"`
-				Options []struct {
-					ID          int    `json:"id"`
-					Type        string `json:"type"`
-					Label       string `json:"label"`
-					CreatedUtc  string `json:"created_utc"`
-					LastUsedUtc string `json:"last_used_utc"`
-				} `json:"options"`
-			}{
+			Mfa: shared.Mfa{
 				Prompt: "no",
 				Add:    "no",
-				Options: []struct {
-					ID          int    `json:"id"`
-					Type        string `json:"type"`
-					Label       string `json:"label"`
-					CreatedUtc  string `json:"created_utc"`
-					LastUsedUtc string `json:"last_used_utc"`
-				}{
+				Options: []shared.MfaOption{
 					{
 						ID:          1,
 						Type:        "webauthn",
@@ -302,29 +286,13 @@ func fakeUser(userID int) shared.User {
 					},
 				},
 			},
-			Password: struct {
-				CreatedUtc string `json:"created_utc"`
-				ExpiresOn  string `json:"expires_on"`
-			}{
+			Password: shared.Password{
 				CreatedUtc: "",
 				ExpiresOn:  "",
 			},
-			Method: struct {
-				Add     string `json:"add"`
-				Options []struct {
-					ID       string `json:"id"`
-					Value    string `json:"value"`
-					Verified bool   `json:"verified"`
-					Created  string `json:"created"`
-				} `json:"options"`
-			}{
+			Method: shared.Method{
 				Add: "no",
-				Options: []struct {
-					ID       string `json:"id"`
-					Value    string `json:"value"`
-					Verified bool   `json:"verified"`
-					Created  string `json:"created"`
-				}{
+				Options: []shared.MethodOption{
 					{
 						ID:    "_BC9GEpZeIqbXoBiLdhrRAwkNUlz7scg",
 						Value: "l***_v*****e@e******.c**", Verified: false, Created: "2024-04-04T19:30:34Z",
