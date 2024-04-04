@@ -41,9 +41,18 @@ type MfaOption struct {
 	Label       string `json:"label"`
 	CreatedUtc  string `json:"created_utc"`
 	LastUsedUtc string `json:"last_used_utc"`
-	//	Data        struct {
-	//		Count int `json:"count"`
-	//	} `json:"data"`
+	Data        any    `json:"data"`
+}
+
+type WebauthnData struct {
+	ID          int    `json:"id"`
+	Label       string `json:"label"`
+	CreatedUtc  string `json:"created_utc"`
+	LastUsedUtc string `json:"last_used_utc"`
+}
+
+type BackupCodeData struct {
+	Count int `json:"count"`
 }
 
 type Password struct {

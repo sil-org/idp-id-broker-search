@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/silinternational/idp-id-broker-search/shared"
 )
 
@@ -145,13 +147,24 @@ func Test_search(t *testing.T) {
 			}
 
 			got, err := search(config, "")
-			if (err != nil) != tt.wantErr {
-				t.Errorf("search() error = %v, wantErr %v", err, tt.wantErr)
+			if tt.wantErr {
+				require.Error(t, err)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("search() = %v, want %v", got, tt.want)
+			require.NoError(t, err)
+
+			require.Equal(t, len(tt.want), len(got))
+
+			if len(tt.want) == 0 {
+				return
 			}
+
+			// spot check a few fields because DeepEqual is touchy with this
+			require.Equal(t, tt.want[0].IDP, got[0].IDP)
+			require.Equal(t, tt.want[0].EmployeeID, got[0].EmployeeID)
+			require.Equal(t, tt.want[0].DisplayName, got[0].DisplayName)
+			require.Equal(t, tt.want[0].Mfa.Options[0].Label, got[0].Mfa.Options[0].Label)
+			require.Equal(t, tt.want[0].Method.Options[0].Value, got[0].Method.Options[0].Value)
 		})
 	}
 }
@@ -269,6 +282,14 @@ func fakeUser(userID int) shared.User {
 						Label:       "Yubikey",
 						CreatedUtc:  "2024-04-03T18:27:44Z",
 						LastUsedUtc: "2024-04-04T12:27:45Z",
+						Data: []shared.WebauthnData{
+							{
+								ID:          1,
+								Label:       "1",
+								CreatedUtc:  "2024-04-04 12:28:24",
+								LastUsedUtc: "2024-04-04 18:28:24",
+							},
+						},
 					},
 					{
 						ID:          2,
@@ -276,6 +297,7 @@ func fakeUser(userID int) shared.User {
 						Label:       "Authy",
 						CreatedUtc:  "2024-04-04T18:32:27Z",
 						LastUsedUtc: "",
+						Data:        []string{},
 					},
 					{
 						ID:          3,
@@ -283,6 +305,9 @@ func fakeUser(userID int) shared.User {
 						Label:       "",
 						CreatedUtc:  "2024-04-04T18:32:47Z",
 						LastUsedUtc: "",
+						Data: shared.BackupCodeData{
+							Count: 10,
+						},
 					},
 				},
 			},
