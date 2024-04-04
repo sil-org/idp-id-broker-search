@@ -2,17 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/silinternational/idp-id-broker-search/shared"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/silinternational/idp-id-broker-search/shared"
+)
+
+const (
+	idp   = "OurIDP"
+	user1 = 1
+	user2 = 2
 )
 
 func Test_loadConfig(t *testing.T) {
-	idp := "OurIDP"
-
 	tests := []struct {
 		name    string
 		env     map[string]string
@@ -46,12 +51,12 @@ func Test_loadConfig(t *testing.T) {
 			env: map[string]string{
 				"BROKER_BASE_URL": "https://example.com",
 				"BROKER_TOKEN":    "abc123",
-				"IDP_NAME": idp,
+				"IDP_NAME":        idp,
 			},
 			want: BrokerConfig{
 				BaseURL: "https://example.com",
 				Token:   "abc123",
-				IDP: idp,
+				IDP:     idp,
 			},
 			wantErr: false,
 		},
@@ -76,8 +81,6 @@ func Test_loadConfig(t *testing.T) {
 }
 
 func Test_search(t *testing.T) {
-	idp := "OurIDP"
-
 	type args struct {
 		status       int
 		query        string
@@ -96,7 +99,7 @@ func Test_search(t *testing.T) {
 			args: args{
 				status:       http.StatusNoContent,
 				query:        "nobody",
-				jsonResponse: ``,
+				jsonResponse: `[]`,
 			},
 			want:    []shared.User{},
 			wantErr: false,
@@ -106,32 +109,21 @@ func Test_search(t *testing.T) {
 			args: args{
 				status:       http.StatusOK,
 				query:        "single",
-				jsonResponse: `[{"employee_id": "123456"}]`,
+				jsonResponse: fmt.Sprintf("[%s]", fakeResponse(user1)),
 			},
-			want: []shared.User{
-				{
-					EmployeeID: "123456",
-					IDP: idp,
-				},
-			},
+			want:    []shared.User{fakeUser(user1)},
 			wantErr: false,
 		},
 		{
-			name: "two result",
+			name: "two results",
 			args: args{
 				status:       http.StatusOK,
 				query:        "double",
-				jsonResponse: `[{"employee_id": "123456"},{"employee_id": "098765"}]`,
+				jsonResponse: fmt.Sprintf("[%s,%s]", fakeResponse(user1), fakeResponse(user2)),
 			},
 			want: []shared.User{
-				{
-					EmployeeID: "123456",
-					IDP: idp,
-				},
-				{
-					EmployeeID: "098765",
-					IDP: idp,
-				},
+				fakeUser(user1),
+				fakeUser(user2),
 			},
 			wantErr: false,
 		},
@@ -149,10 +141,10 @@ func Test_search(t *testing.T) {
 			config := BrokerConfig{
 				BaseURL: server.URL,
 				Token:   "ignored",
-				IDP: idp,
+				IDP:     idp,
 			}
 
-			got, err := search(config, tt.args.query)
+			got, err := search(config, "")
 			if (err != nil) != tt.wantErr {
 				t.Errorf("search() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -162,4 +154,190 @@ func Test_search(t *testing.T) {
 			}
 		})
 	}
+}
+
+func fakeResponse(userID int) string {
+	switch userID {
+	case 1:
+		return `{
+		"uuid": "1f93d396-8140-49c0-843e-47dae5291123",
+		"employee_id": "123456",
+		"first_name": "Lisa",
+		"last_name": "VanNote",
+		"display_name": "Lisa VanNote",
+		"username": "lisa_vannote",
+		"email": "lisa_vannote@example.org",
+		"active": "yes",
+		"locked": "no",
+		"last_login_utc": null,
+		"created_utc": "2024-04-01T18:27:02Z",
+		"deactivated_utc": null,
+		"manager_email": null,
+		"personal_email": "",
+		"hide": "no",
+		"member": [
+			"dev"
+		],
+		"mfa": {
+			"prompt": "no",
+			"add": "no",
+			"active": "yes",
+			"options": [
+				{
+					"id": 1,
+					"type": "webauthn",
+					"label": "Yubikey",
+					"created_utc": "2024-04-03T18:27:44Z",
+					"last_used_utc": "2024-04-04T12:27:45Z",
+					"data": [
+						{
+							"id": 1,
+							"label": "1",
+							"last_used_utc": "2024-04-04 18:28:24",
+							"created_utc": "2024-04-04 12:28:24"
+						}
+					]
+				},
+				{
+					"id": 2,
+					"type": "totp",
+					"label": "Authy",
+					"created_utc": "2024-04-04T18:32:27Z",
+					"last_used_utc": null,
+					"data": []
+				},
+				{
+					"id": 3,
+					"type": "backupcode",
+					"label": null,
+					"created_utc": "2024-04-04T18:32:47Z",
+					"last_used_utc": null,
+					"data": {
+						"count": 10
+					}
+				}
+			]
+		},
+		"method": {
+			"add": "no",
+			"options": [
+				{
+					"id": "_BC9GEpZeIqbXoBiLdhrRAwkNUlz7scg",
+					"value": "l***_v*****e@e******.c**",
+					"verified": false,
+					"created": "2024-04-04T19:30:34Z"
+				}
+			]
+		},
+        "profile_review": "no",
+		"require_mfa": "no"
+	}`
+	case 2:
+		return `{"employee_id": "098765"}`
+	}
+	return "{}"
+}
+
+func fakeUser(userID int) shared.User {
+	switch userID {
+	case 1:
+		return shared.User{
+			IDP:            "OurIDP",
+			EmployeeID:     "123456",
+			FirstName:      "Lisa",
+			LastName:       "VanNote",
+			DisplayName:    "Lisa VanNote",
+			Username:       "lisa_vannote",
+			Email:          "lisa_vannote@example.org",
+			Active:         "yes",
+			Locked:         "no",
+			LastLoginUtc:   "",
+			CreatedUtc:     "2024-04-01T18:27:02Z",
+			DeactivatedUtc: "",
+			ManagerEmail:   "",
+			PersonalEmail:  "",
+			Hide:           "no",
+			RequireMFA:     "no",
+			Member:         []string{"dev"},
+			Mfa: struct {
+				Prompt  string `json:"prompt"`
+				Add     string `json:"add"`
+				Options []struct {
+					ID          int    `json:"id"`
+					Type        string `json:"type"`
+					Label       string `json:"label"`
+					CreatedUtc  string `json:"created_utc"`
+					LastUsedUtc string `json:"last_used_utc"`
+				} `json:"options"`
+			}{
+				Prompt: "no",
+				Add:    "no",
+				Options: []struct {
+					ID          int    `json:"id"`
+					Type        string `json:"type"`
+					Label       string `json:"label"`
+					CreatedUtc  string `json:"created_utc"`
+					LastUsedUtc string `json:"last_used_utc"`
+				}{
+					{
+						ID:          1,
+						Type:        "webauthn",
+						Label:       "Yubikey",
+						CreatedUtc:  "2024-04-03T18:27:44Z",
+						LastUsedUtc: "2024-04-04T12:27:45Z",
+					},
+					{
+						ID:          2,
+						Type:        "totp",
+						Label:       "Authy",
+						CreatedUtc:  "2024-04-04T18:32:27Z",
+						LastUsedUtc: "",
+					},
+					{
+						ID:          3,
+						Type:        "backupcode",
+						Label:       "",
+						CreatedUtc:  "2024-04-04T18:32:47Z",
+						LastUsedUtc: "",
+					},
+				},
+			},
+			Password: struct {
+				CreatedUtc string `json:"created_utc"`
+				ExpiresOn  string `json:"expires_on"`
+			}{
+				CreatedUtc: "",
+				ExpiresOn:  "",
+			},
+			Method: struct {
+				Add     string `json:"add"`
+				Options []struct {
+					ID       string `json:"id"`
+					Value    string `json:"value"`
+					Verified bool   `json:"verified"`
+					Created  string `json:"created"`
+				} `json:"options"`
+			}{
+				Add: "no",
+				Options: []struct {
+					ID       string `json:"id"`
+					Value    string `json:"value"`
+					Verified bool   `json:"verified"`
+					Created  string `json:"created"`
+				}{
+					{
+						ID:    "_BC9GEpZeIqbXoBiLdhrRAwkNUlz7scg",
+						Value: "l***_v*****e@e******.c**", Verified: false, Created: "2024-04-04T19:30:34Z",
+					},
+				},
+			},
+		}
+
+	case 2:
+		return shared.User{
+			EmployeeID: "098765",
+			IDP:        idp,
+		}
+	}
+	return shared.User{}
 }
