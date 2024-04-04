@@ -89,8 +89,33 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 	}
 
 	for i := range results {
+		patchMfaCounts(results[i].Mfa.Options)
 		results[i].IDP = config.IDP
 	}
 
 	return results, nil
+}
+
+// patchMfaCounts sets the "count" attribute on the MFA options struct. This is in lieu of the id-broker not providing
+// this, but instead making "data" take on multiple data types, depending on the MFA type.
+func patchMfaCounts(mfaOptions []shared.MfaOption) {
+	for i, o := range mfaOptions {
+		switch o.Type {
+		case shared.MfaTypeBackupCode:
+			data, _ := o.Data.(map[string]interface{})
+			if o.Count == 0 && data["count"] != 0 {
+				count, _ := data["count"].(float64)
+				mfaOptions[i].Count = int(count)
+			}
+
+		case shared.MfaTypeTotp:
+			// no data is included for TOTP
+
+		case shared.MfaTypeWebauthn:
+			data, _ := o.Data.([]any)
+			if o.Count == 0 && len(data) != 0 {
+				mfaOptions[i].Count = len(data)
+			}
+		}
+	}
 }

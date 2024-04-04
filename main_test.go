@@ -164,6 +164,7 @@ func Test_search(t *testing.T) {
 			require.Equal(t, tt.want[0].EmployeeID, got[0].EmployeeID)
 			require.Equal(t, tt.want[0].DisplayName, got[0].DisplayName)
 			require.Equal(t, tt.want[0].Mfa.Options[0].Label, got[0].Mfa.Options[0].Label)
+			require.Equal(t, tt.want[0].Mfa.Options[0].Count, got[0].Mfa.Options[0].Count)
 			require.Equal(t, tt.want[0].Method.Options[0].Value, got[0].Method.Options[0].Value)
 		})
 	}
@@ -282,6 +283,7 @@ func fakeUser(userID int) shared.User {
 						Label:       "Yubikey",
 						CreatedUtc:  "2024-04-03T18:27:44Z",
 						LastUsedUtc: "2024-04-04T12:27:45Z",
+						Count:       1,
 						Data: []shared.WebauthnData{
 							{
 								ID:          1,
@@ -305,6 +307,7 @@ func fakeUser(userID int) shared.User {
 						Label:       "",
 						CreatedUtc:  "2024-04-04T18:32:47Z",
 						LastUsedUtc: "",
+						Count:       10,
 						Data: shared.BackupCodeData{
 							Count: 10,
 						},

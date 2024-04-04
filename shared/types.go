@@ -1,5 +1,11 @@
 package shared
 
+const (
+	MfaTypeBackupCode = "backupcode"
+	MfaTypeTotp       = "totp"
+	MfaTypeWebauthn   = "webauthn"
+)
+
 // Query is expected payload to lambda function
 type Query struct {
 	Search string
@@ -41,6 +47,7 @@ type MfaOption struct {
 	Label       string `json:"label"`
 	CreatedUtc  string `json:"created_utc"`
 	LastUsedUtc string `json:"last_used_utc"`
+	Count       int    `json:"count"`
 	Data        any    `json:"data"`
 }
 
