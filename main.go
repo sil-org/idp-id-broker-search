@@ -102,7 +102,7 @@ func patchMfaCounts(mfaOptions []shared.MfaOption) {
 	for i, o := range mfaOptions {
 		switch o.Type {
 		case shared.MfaTypeBackupCode:
-			data, _ := o.Data.(map[string]interface{})
+			data, _ := o.Data.(map[string]any)
 			if o.Count == 0 && data["count"] != 0 {
 				count, _ := data["count"].(float64)
 				mfaOptions[i].Count = int(count)
