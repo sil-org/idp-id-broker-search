@@ -3,13 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/silinternational/idp-id-broker-search/shared"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/aws/aws-lambda-go/lambda"
+
+	"github.com/silinternational/idp-id-broker-search/shared"
 )
 
 type BrokerConfig struct {
@@ -77,7 +79,7 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 
 	var results []shared.User
 
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	bodyText, err := io.ReadAll(resp.Body)
 	err = json.Unmarshal(bodyText, &results)
 	if err != nil {
 		log.Println("JSON parse error:", err)
@@ -87,8 +89,33 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 	}
 
 	for i := range results {
+		patchMfaCounts(results[i].Mfa.Options)
 		results[i].IDP = config.IDP
 	}
 
 	return results, nil
+}
+
+// patchMfaCounts sets the "count" attribute on the MFA options struct. This is in lieu of the id-broker not providing
+// this, but instead making "data" take on multiple data types, depending on the MFA type.
+func patchMfaCounts(mfaOptions []shared.MfaOption) {
+	for i, o := range mfaOptions {
+		switch o.Type {
+		case shared.MfaTypeBackupCode:
+			data, _ := o.Data.(map[string]any)
+			if o.Count == 0 && data["count"] != 0 {
+				count, _ := data["count"].(float64)
+				mfaOptions[i].Count = int(count)
+			}
+
+		case shared.MfaTypeTotp:
+			// no data is included for TOTP
+
+		case shared.MfaTypeWebauthn:
+			data, _ := o.Data.([]any)
+			if o.Count == 0 && len(data) != 0 {
+				mfaOptions[i].Count = len(data)
+			}
+		}
+	}
 }
