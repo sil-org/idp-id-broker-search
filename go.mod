@@ -1,4 +1,4 @@
-module github.com/silinternational/idp-id-broker-search
+module github.com/silinternational/idp-id-broker-search/v2
 
 go 1.22
 

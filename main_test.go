@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/silinternational/idp-id-broker-search/shared"
+	"github.com/silinternational/idp-id-broker-search/v2/shared"
 )
 
 const (

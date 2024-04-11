@@ -11,7 +11,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 
-	"github.com/silinternational/idp-id-broker-search/shared"
+	"github.com/silinternational/idp-id-broker-search/v2/shared"
 )
 
 type BrokerConfig struct {
