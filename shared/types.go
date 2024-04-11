@@ -1,5 +1,11 @@
 package shared
 
+const (
+	MfaTypeBackupCode = "backupcode"
+	MfaTypeTotp       = "totp"
+	MfaTypeWebauthn   = "webauthn"
+)
+
 // Query is expected payload to lambda function
 type Query struct {
 	Search string
@@ -24,31 +30,51 @@ type User struct {
 	Hide           string   `json:"hide"`
 	RequireMFA     string   `json:"require_mfa"`
 	Member         []string `json:"member"`
-	Mfa            struct {
-		Prompt  string `json:"prompt"`
-		Add     string `json:"add"`
-		Options []struct {
-			ID          int    `json:"id"`
-			Type        string `json:"type"`
-			Label       string `json:"label"`
-			CreatedUtc  string `json:"created_utc"`
-			LastUsedUtc string `json:"last_used_utc"`
-			// Data        struct {
-			// 	Count int `json:"count"`
-			// } `json:"data"`
-		} `json:"options"`
-	} `json:"mfa"`
-	Password struct {
-		CreatedUtc string `json:"created_utc"`
-		ExpiresOn  string `json:"expires_on"`
-	} `json:"password"`
-	Method struct {
-		Add     string `json:"add"`
-		Options []struct {
-			ID       string `json:"id"`
-			Value    string `json:"value"`
-			Verified bool   `json:"verified"`
-			Created  string `json:"created"`
-		} `json:"options"`
-	} `json:"method"`
+	Mfa            Mfa      `json:"mfa"`
+	Password       Password `json:"password"`
+	Method         Method   `json:"method"`
+}
+
+type Mfa struct {
+	Prompt  string      `json:"prompt"`
+	Add     string      `json:"add"`
+	Options []MfaOption `json:"options"`
+}
+
+type MfaOption struct {
+	ID          int    `json:"id"`
+	Type        string `json:"type"`
+	Label       string `json:"label"`
+	CreatedUtc  string `json:"created_utc"`
+	LastUsedUtc string `json:"last_used_utc"`
+	Count       int    `json:"count"`
+	Data        any    `json:"data"`
+}
+
+type WebauthnData struct {
+	ID          int    `json:"id"`
+	Label       string `json:"label"`
+	CreatedUtc  string `json:"created_utc"`
+	LastUsedUtc string `json:"last_used_utc"`
+}
+
+type BackupCodeData struct {
+	Count int `json:"count"`
+}
+
+type Password struct {
+	CreatedUtc string `json:"created_utc"`
+	ExpiresOn  string `json:"expires_on"`
+}
+
+type Method struct {
+	Add     string         `json:"add"`
+	Options []MethodOption `json:"options"`
+}
+
+type MethodOption struct {
+	ID       string `json:"id"`
+	Value    string `json:"value"`
+	Verified bool   `json:"verified"`
+	Created  string `json:"created"`
 }
