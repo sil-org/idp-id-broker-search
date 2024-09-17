@@ -6,5 +6,5 @@ services:
     environment:
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-      DOWNLOAD_BUCKET: id-broker-search
+      DOWNLOAD_BUCKET: $S3_BUCKET
     command: ["bash"]
