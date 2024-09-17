@@ -39,8 +39,6 @@ moved {
 }
 
 resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search" {
-  provider = aws.new_primary
-
   bucket = aws_s3_bucket.idp_id_broker_search.id
   rule {
     object_ownership = "BucketOwnerPreferred"
@@ -50,8 +48,6 @@ resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search" {
 
 
 resource "aws_s3_bucket_public_access_block" "idp_id_broker_search" {
-  provider = aws.new_primary
-
   bucket                  = aws_s3_bucket.idp_id_broker_search.id
   block_public_acls       = false
   block_public_policy     = false
@@ -102,7 +98,7 @@ moved {
 }
 
 resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search_2" {
-  provider = aws.new_primary
+  provider = aws.secondary
 
   bucket = aws_s3_bucket.idp_id_broker_search_2.id
   rule {
@@ -113,7 +109,7 @@ resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search_2" {
 
 
 resource "aws_s3_bucket_public_access_block" "idp_id_broker_search_2" {
-  provider = aws.new_primary
+  provider = aws.secondary
 
   bucket                  = aws_s3_bucket.idp_id_broker_search_2.id
   block_public_acls       = false
