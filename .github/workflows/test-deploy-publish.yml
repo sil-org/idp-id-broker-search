@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Test
-        run: docker-compose run --rm app go test ./...
+        run: docker compose run --rm app go test -v ./...
 
   deploy:
     name: Deploy
@@ -21,8 +21,9 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build, Sign, and Deploy
-        run: docker-compose run --rm -e GITHUB_REF_NAME app ./build-sign-deploy.sh
+        run: docker compose run --rm -e GITHUB_REF_NAME app ./build-sign-deploy.sh
