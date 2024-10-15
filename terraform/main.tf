@@ -119,7 +119,7 @@ resource "aws_s3_bucket_public_access_block" "idp_id_broker_search_2" {
 }
 
 
-// Create a third S3 bucket for migration of primary region to us-east_2
+// Create a third S3 bucket for migration of primary region to us-east-2
 resource "aws_s3_bucket" "idp_id_broker_search_3" {
   provider      = aws.new_primary
   bucket        = "${var.app_name}-${var.aws_region_new_primary}"
