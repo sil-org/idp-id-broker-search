@@ -25,6 +25,7 @@ provider "aws" {
   }
 }
 
+# This can be removed once the third bucket has been removed
 provider "aws" {
   alias      = "new_primary"
   region     = var.aws_region_new_primary
