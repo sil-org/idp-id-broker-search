@@ -1,7 +1,14 @@
 FROM golang:1.22
-RUN apt-get update -y && apt-get install -y awscli zip
+
+RUN apt-get update -y && \
+    apt-get --no-install-recommends install -y awscli zip
+
+# set up to run as a normal user
+RUN useradd user && mkdir /home/user && chown user:user /home/user
+USER user
+ENV GOPATH=/home/user/go
 
 # Copy in source and install deps
-RUN mkdir -p /app/idp-id-broker-search
-WORKDIR /app/idp-id-broker-search
-COPY ./ /app/idp-id-broker-search/
+WORKDIR /home/user
+COPY --chown=user main.go go.mod go.sum build-sign-deploy.sh /home/user/
+COPY --chown=user shared/types.go  /home/user/shared/
