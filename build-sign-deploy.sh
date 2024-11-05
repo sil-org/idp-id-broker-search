@@ -22,13 +22,3 @@ export AWS_REGION=${AWS_REGION2}
 bucket=$DOWNLOAD_BUCKET-${AWS_REGION}
 aws s3 cp --acl public-read idp-id-broker-search.zip s3://$bucket/$GITHUB_REF_NAME/
 aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$bucket/$GITHUB_REF_NAME/
-
-if [ -z $AWS_REGION3 ]; then
-  exit 0
-fi
-
-export AWS_REGION=${AWS_REGION3}
-bucket=$DOWNLOAD_BUCKET-${AWS_REGION}
-aws s3 cp --acl public-read idp-id-broker-search.zip s3://$bucket/$GITHUB_REF_NAME/
-aws s3 cp --acl public-read --content-type text/plain idp-id-broker-search.zip.sum s3://$bucket/$GITHUB_REF_NAME/
-
