@@ -10,8 +10,7 @@
       ],
       "Resource": [
         "arn:aws:s3:::${bucket_name}/*",
-        "arn:aws:s3:::${bucket2_name}/*",
-        "arn:aws:s3:::${bucket3_name}/*"
+        "arn:aws:s3:::${bucket2_name}/*"
       ]
     }
   ]
