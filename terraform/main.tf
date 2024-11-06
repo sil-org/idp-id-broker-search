@@ -144,7 +144,7 @@ data "template_file" "ci_uploader" {
   template = file("${path.module}/ci-bucket-policy.json")
 
   vars = {
-    bucket_name  = aws_s3_bucket.idp_id_broker_search.bucket
+    bucket1_name = aws_s3_bucket.idp_id_broker_search.bucket
     bucket2_name = aws_s3_bucket.idp_id_broker_search_2.bucket
   }
 }
