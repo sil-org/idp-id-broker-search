@@ -1,16 +1,20 @@
 output "ci_uploader_access_key" {
-  value = aws_iam_access_key.ci_uploader.id
+  description = "AWS Access Key ID for CI/CD pipeline"
+  value       = aws_iam_access_key.ci_uploader.id
 }
 
 output "ci_uploader_secret_key" {
-  value     = aws_iam_access_key.ci_uploader.secret
-  sensitive = true
+  description = "AWS Access Key Secret for CI/CD pipeline"
+  value       = aws_iam_access_key.ci_uploader.secret
+  sensitive   = true
 }
 
 output "bucket_name_region_1" {
-  value = aws_s3_bucket.idp_id_broker_search.bucket
+  description = "Bucket name for primary region Lambda function files"
+  value       = aws_s3_bucket.idp_id_broker_search.bucket
 }
 
 output "bucket_name_region_2" {
-  value = aws_s3_bucket.idp_id_broker_search_2.bucket
+  description = "Bucket name for secondary region Lambda function files"
+  value       = aws_s3_bucket.idp_id_broker_search_2.bucket
 }
