@@ -80,18 +80,6 @@ moved {
   to   = aws_s3_bucket.idp_id_broker_search_2
 }
 
-resource "aws_s3_bucket_acl" "idp_id_broker_search_2" {
-  provider   = aws.secondary
-  bucket     = aws_s3_bucket.idp_id_broker_search_2.id
-  acl        = "public-read"
-  depends_on = [aws_s3_bucket_ownership_controls.idp_id_broker_search_2]
-}
-
-moved {
-  from = aws_s3_bucket_acl.idp-id-broker-search-2
-  to   = aws_s3_bucket_acl.idp_id_broker_search_2
-}
-
 resource "aws_s3_bucket_versioning" "idp_id_broker_search_2" {
   provider = aws.secondary
   bucket   = aws_s3_bucket.idp_id_broker_search_2.id
