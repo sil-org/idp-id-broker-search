@@ -26,6 +26,12 @@ variable "aws_secret_key" {
   default = null
 }
 
+variable "bucket_policy_principals" {
+  description = "AWS accounts, users, or policies that are allowed to read objects in the id-broker-search buckets"
+  type        = list(string)
+  default     = []
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
