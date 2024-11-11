@@ -39,9 +39,9 @@ resource "aws_s3_bucket_ownership_controls" "idp_id_broker_search" {
 resource "aws_s3_bucket_public_access_block" "idp_id_broker_search" {
   bucket                  = aws_s3_bucket.idp_id_broker_search.id
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
-  restrict_public_buckets = true
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_policy" "idp_id_broker_search" {
@@ -50,12 +50,22 @@ resource "aws_s3_bucket_policy" "idp_id_broker_search" {
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "LimitedAccess"
         Effect = "Allow"
         Principal = {
           AWS = var.bucket_policy_principals
         }
         Action   = "s3:GetObject"
         Resource = "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search.bucket}/*"
+      },
+      {
+        Sid    = "PublicAccessChecksum"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action   = "s3:GetObject"
+        Resource = "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search.bucket}/*.sum"
       },
     ]
   })
@@ -107,9 +117,9 @@ resource "aws_s3_bucket_public_access_block" "idp_id_broker_search_2" {
 
   bucket                  = aws_s3_bucket.idp_id_broker_search_2.id
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
-  restrict_public_buckets = true
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_policy" "idp_id_broker_search_2" {
@@ -120,12 +130,22 @@ resource "aws_s3_bucket_policy" "idp_id_broker_search_2" {
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "LimitedAccess"
         Effect = "Allow"
         Principal = {
           AWS = var.bucket_policy_principals
         }
         Action   = "s3:GetObject"
         Resource = "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search_2.bucket}/*"
+      },
+      {
+        Sid    = "PublicAccessChecksum"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action   = "s3:GetObject"
+        Resource = "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search_2.bucket}/*.sum"
       },
     ]
   })
