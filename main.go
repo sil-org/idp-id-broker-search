@@ -80,6 +80,10 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 	var results []shared.User
 
 	bodyText, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []shared.User{}, err
+	}
+
 	err = json.Unmarshal(bodyText, &results)
 	if err != nil {
 		log.Println("JSON parse error:", err)
