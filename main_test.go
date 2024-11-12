@@ -137,11 +137,12 @@ func Test_search(t *testing.T) {
 			mux.HandleFunc("/user", func(w http.ResponseWriter, req *http.Request) {
 				w.WriteHeader(tt.args.status)
 				w.Header().Set("content-type", "application/json")
-				if tt.args.status == http.StatusOK {
-					_, err := fmt.Fprint(w, tt.args.jsonResponse)
-					if err != nil {
-						require.NoError(t, err)
-					}
+				if tt.args.status != http.StatusOK {
+					return
+				}
+				_, err := fmt.Fprint(w, tt.args.jsonResponse)
+				if err != nil {
+					require.NoError(t, err)
 				}
 			})
 
