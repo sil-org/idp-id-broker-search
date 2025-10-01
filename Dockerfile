@@ -1,4 +1,4 @@
-FROM golang:1.22
+FROM golang:1.25
 
 RUN apt-get update -y && \
     apt-get --no-install-recommends install -y awscli zip

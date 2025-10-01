@@ -11,7 +11,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 
-	"github.com/silinternational/idp-id-broker-search/v2/shared"
+	"github.com/sil-org/idp-id-broker-search/v2/shared"
 )
 
 type BrokerConfig struct {
@@ -80,6 +80,10 @@ func search(config BrokerConfig, query string) ([]shared.User, error) {
 	var results []shared.User
 
 	bodyText, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []shared.User{}, err
+	}
+
 	err = json.Unmarshal(bodyText, &results)
 	if err != nil {
 		log.Println("JSON parse error:", err)

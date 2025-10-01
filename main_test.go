@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/silinternational/idp-id-broker-search/v2/shared"
+	"github.com/sil-org/idp-id-broker-search/v2/shared"
 )
 
 const (
@@ -137,7 +137,13 @@ func Test_search(t *testing.T) {
 			mux.HandleFunc("/user", func(w http.ResponseWriter, req *http.Request) {
 				w.WriteHeader(tt.args.status)
 				w.Header().Set("content-type", "application/json")
-				fmt.Fprintf(w, tt.args.jsonResponse)
+				if tt.args.status != http.StatusOK {
+					return
+				}
+				_, err := fmt.Fprint(w, tt.args.jsonResponse)
+				if err != nil {
+					require.NoError(t, err)
+				}
 			})
 
 			config := BrokerConfig{
