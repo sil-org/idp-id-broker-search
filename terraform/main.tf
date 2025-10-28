@@ -22,6 +22,21 @@ resource "aws_s3_bucket_versioning" "idp_id_broker_search" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "idp_id_broker_search" {
+  bucket = aws_s3_bucket.idp_id_broker_search.id
+  rule {
+    id     = "delete-old-develop-and-main-versions"
+    status = "Enabled"
+
+    # empty filter applies to all objects in the bucket
+    filter {}
+
+    noncurrent_version_expiration {
+      newer_noncurrent_versions = 1
+    }
+  }
+}
+
 moved {
   from = aws_s3_bucket_versioning.idp-id-broker-search
   to   = aws_s3_bucket_versioning.idp_id_broker_search
