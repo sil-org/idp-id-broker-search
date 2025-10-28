@@ -32,6 +32,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_id_broker_search" {
     filter {}
 
     noncurrent_version_expiration {
+      noncurrent_days = 1
       newer_noncurrent_versions = 1
     }
   }
