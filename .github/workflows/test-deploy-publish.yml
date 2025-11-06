@@ -2,6 +2,7 @@ name: Test, Deploy, Publish
 
 on:
   push:
+    tags: [ '*' ]
     branches: [ '**' ]
     paths-ignore: [ 'terraform/**' ]
 
@@ -42,7 +43,7 @@ jobs:
     name: Deploy
     needs: [ 'test', 'lint' ]
     runs-on: ubuntu-latest
-    if: github.ref_name == 'main' || github.ref_name == 'develop'
+    if: github.ref_name == 'main' || github.ref_name == 'develop' || startsWith(github.ref, 'refs/tags/')
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
