@@ -2,7 +2,7 @@
 // Create S3 bucket for uploading binary
 resource "aws_s3_bucket" "idp_id_broker_search" {
   bucket        = "${var.app_name}-${var.aws_region}"
-  force_destroy = true
+  force_destroy = false
 
   tags = {
     app_name = var.app_name
