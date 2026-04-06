@@ -1,12 +1,6 @@
-output "ci_uploader_access_key" {
-  description = "AWS Access Key ID for CI/CD pipeline"
-  value       = aws_iam_access_key.ci_uploader.id
-}
-
-output "ci_uploader_secret_key" {
-  description = "AWS Access Key Secret for CI/CD pipeline"
-  value       = aws_iam_access_key.ci_uploader.secret
-  sensitive   = true
+output "ci_uploader_role_arn" {
+  description = "AWS Role ARN for CI/CD upload to the S3 bucket"
+  value       = aws_iam_role.ci_uploader.arn
 }
 
 output "bucket_name_region_1" {

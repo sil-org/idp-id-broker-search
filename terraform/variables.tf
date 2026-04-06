@@ -32,6 +32,22 @@ variable "bucket_policy_principals" {
   default     = []
 }
 
+variable "github_oidc_provider_arn" {
+  description = <<-EOT
+    ARN of the OIDC provider for GitHub in AWS IAM, used for GitHub Actions to authenticate to AWS. The provider
+    can be created in Terraform using the `aws_iam_openid_connect_provider` resource. Specify the URL as
+    "https://token.actions.githubusercontent.com" and the client_id_list as ["sts.amazonaws.com"].
+  EOT
+  type        = string
+}
+
+variable "github_repository" {
+  description = <<-EOT
+    GitHub repository that should be granted access to the OIDC provider for GitHub. Format should be 'owner/repo'.
+  EOT
+  type        = string
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
