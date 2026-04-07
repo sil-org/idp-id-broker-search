@@ -168,44 +168,50 @@ resource "aws_s3_bucket_policy" "idp_id_broker_search_2" {
 }
 
 /*
- * AWS User for CI/CD upload to the S3 bucket
+ * AWS Role for CI/CD upload to the S3 bucket
  */
 
-resource "aws_iam_user" "ci_uploader" {
+resource "aws_iam_role" "ci_uploader" {
   name = "${var.app_name}-uploader"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid    = "GitHub"
+      Effect = "Allow"
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Principal = {
+        Federated = var.github_oidc_provider_arn
+      }
+      Condition = {
+        StringEquals = {
+          "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
+        },
+        StringLike = {
+          "token.actions.githubusercontent.com:sub" : "repo:${var.github_repository}:*"
+        }
+      }
+    }]
+  })
 }
 
-moved {
-  from = aws_iam_user.ci-uploader
-  to   = aws_iam_user.ci_uploader
-}
-
-resource "aws_iam_access_key" "ci_uploader" {
-  user = aws_iam_user.ci_uploader.name
-}
-
-moved {
-  from = aws_iam_access_key.ci-uploader
-  to   = aws_iam_access_key.ci_uploader
-}
-
-data "template_file" "ci_uploader" {
-  template = file("${path.module}/ci-bucket-policy.json")
-
-  vars = {
-    bucket1_name = aws_s3_bucket.idp_id_broker_search.bucket
-    bucket2_name = aws_s3_bucket.idp_id_broker_search_2.bucket
-  }
-}
-
-resource "aws_iam_user_policy" "ci_uploader" {
+resource "aws_iam_role_policy" "ci_uploader" {
   name = "S3-Access"
-  user = aws_iam_user.ci_uploader.name
+  role = aws_iam_role.ci_uploader.name
 
-  policy = data.template_file.ci_uploader.rendered
-}
-
-moved {
-  from = aws_iam_user_policy.ci-uploader
-  to   = aws_iam_user_policy.ci_uploader
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl",
+        ]
+        Resource = [
+          "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search.bucket}/*",
+          "arn:aws:s3:::${aws_s3_bucket.idp_id_broker_search_2.bucket}/*",
+        ]
+      }
+    ]
+  })
 }
