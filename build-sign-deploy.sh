@@ -8,7 +8,7 @@ zip idp-id-broker-search.zip bootstrap
 # Create base64 encoded sha256 checksum for terraform to use to detect changes
 openssl dgst -binary -sha256 idp-id-broker-search.zip | base64 --wrap=0 > idp-id-broker-search.zip.sum
 
-# Push zip and checksum to S3 under folder for GITHUB_REF_NAME (ex: develop or 1.2.3)
+# Push zip and checksum to S3 under folder for GITHUB_REF_NAME (ex: main or 1.2.3)
 GITHUB_REF_NAME=${GITHUB_REF_NAME:="unknown"}
 bucket=$DOWNLOAD_BUCKET-${AWS_REGION}
 aws s3 cp idp-id-broker-search.zip s3://$bucket/$GITHUB_REF_NAME/
