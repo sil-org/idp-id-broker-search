@@ -11,7 +11,7 @@ type Query struct {
 	Search string
 }
 
-// See UserResponse object defined in https://github.com/sil-org/idp-id-broker/blob/develop/api.raml
+// User corresponds to the UserResponse object defined in https://github.com/sil-org/idp-id-broker/blob/main/api.raml
 type User struct {
 	IDP            string   `json:"idp"`
 	EmployeeID     string   `json:"employee_id"`

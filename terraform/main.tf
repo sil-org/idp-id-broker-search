@@ -25,7 +25,7 @@ resource "aws_s3_bucket_versioning" "idp_id_broker_search" {
 resource "aws_s3_bucket_lifecycle_configuration" "idp_id_broker_search" {
   bucket = aws_s3_bucket.idp_id_broker_search.id
   rule {
-    id     = "delete-old-develop-and-main-versions"
+    id     = "delete-old-versions"
     status = "Enabled"
 
     # empty filter applies to all objects in the bucket
